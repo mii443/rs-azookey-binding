@@ -5,3 +5,7 @@
 
 #endif
 
+struct FFICandidate {
+  char *text;
+  int correspondingCount;
+};

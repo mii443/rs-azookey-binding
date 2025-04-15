@@ -9,7 +9,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "azookey-swift",
-            type: .static,
+            type: .dynamic,
             targets: ["azookey-swift"]),
         .library(
             name: "ffi",
@@ -17,7 +17,7 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(url: "https://github.com/azookey/AzooKeyKanaKanjiConverter", branch: "66a341b7e656c2fff02c1399882e88ee067b3d31")
+        .package(url: "https://github.com/azookey/AzooKeyKanaKanjiConverter", branch: "66a341b7e656c2fff02c1399882e88ee067b3d31", traits: ["Zenzai"])
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
@@ -26,9 +26,10 @@ let package = Package(
         .target(
             name: "azookey-swift",
             dependencies: [
-                .product(name: "KanaKanjiConverterModule", package: "azookeykanakanjiconverter"),
+                .product(name: "KanaKanjiConverterModuleWithDefaultDictionary", package: "AzooKeyKanaKanjiConverter"),
                 "ffi"
-            ]
+            ],
+            swiftSettings: [.interoperabilityMode(.Cxx)],
         ),
         .testTarget(
             name: "azookey-swiftTests",

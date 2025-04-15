@@ -1,5 +1,7 @@
+use std::env;
+
 fn main() {
-    let project_dir = std::env::var("CARGO_MANIFEST_DIR").unwrap();
+    let project_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
 
     // Build the Swift library
     let swift_build_command = format!(
@@ -18,16 +20,21 @@ fn main() {
             );
         }
 
-        // rename the output file to azookey-swift.lib from libazookey-swift.a
-        let output_path = format!(
-            "{}/azookey-swift/.build/release/libazookey-swift.a",
+        // move azookey-swift.dll to the target directory
+        let crate_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
+        let profile = env::var("PROFILE").unwrap();
+        let target_dir = format!("{}/target/{}", crate_dir, profile);
+        let swift_lib_path = format!(
+            "{}/azookey-swift/.build/release/azookey-swift.dll",
             project_dir
         );
-        let new_output_path = format!(
-            "{}/azookey-swift/.build/release/azookey-swift.lib",
-            project_dir
-        );
-        std::fs::rename(&output_path, &new_output_path).expect("Failed to rename file");
+        let target_lib_path = format!("{}/azookey-swift.dll", target_dir);
+        std::fs::copy(&swift_lib_path, &target_lib_path).unwrap_or_else(|_| {
+            panic!(
+                "Failed to copy azookey-swift.dll to target directory: {}",
+                target_lib_path
+            )
+        });
     } else {
         // non-windows
         let output = std::process::Command::new("sh")
@@ -50,7 +57,7 @@ fn main() {
     );
     println!(
         "cargo:rustc-link-search={}",
-        std::env::var("SWIFT_LIB_DIR").unwrap()
+        env::var("SWIFT_LIB_DIR").unwrap()
     );
-    println!("cargo:rustc-link-lib=static=azookey-swift");
+    println!("cargo:rustc-link-lib=azookey-swift");
 }

@@ -4,5 +4,5 @@ fn main() {
         "cargo:rustc-link-search={}/azookey-swift/.build/release/",
         project_dir
     );
-    println!("cargo:rustc-link-lib=azookey-swift");
+    println!("cargo:rustc-link-lib=static=azookey-swift");
 }

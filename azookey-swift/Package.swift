@@ -9,7 +9,7 @@ let package = Package(
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "azookey-swift",
-            type: .dynamic,
+            type: .static,
             targets: ["azookey-swift"]),
         .library(
             name: "ffi",

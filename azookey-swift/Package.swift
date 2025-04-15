@@ -16,6 +16,9 @@ let package = Package(
             targets: ["azookey-swift"]
         )
     ],
+    dependencies: [
+        .package(url: "https://github.com/azookey/AzooKeyKanaKanjiConverter", branch: "66a341b7e656c2fff02c1399882e88ee067b3d31")
+    ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
@@ -23,6 +26,7 @@ let package = Package(
         .target(
             name: "azookey-swift",
             dependencies: [
+                .product(name: "KanaKanjiConverterModule", package: "azookeykanakanjiconverter"),
                 "ffi"
             ]
         ),
